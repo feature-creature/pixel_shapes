@@ -4,11 +4,11 @@ using namespace std;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    //background black, color white
+    //background white, default color black
     ofSetBackgroundColor(255);
     ofSetColor(0);
 
-    // initialize grid
+    // initialize matrix
     spacing = 10;
     startPos = spacing/2;
 
@@ -28,26 +28,36 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
     vidGrabber.update();
     pixels = vidGrabber.getPixels();
-
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
 
     ofPushMatrix();
-    //move grid off of the window edge
+    //move entire matrix away from the window edge
     ofTranslate(startPos,startPos);
     //iterate over matrix rows by columns
     for(int i = 0; i < ofGetWidth(); i += spacing){
         for(int j = 0; j < ofGetHeight(); j += spacing){
+            //SHAPE
+            //location
             int locX = i;
             int locY = j;
+            //color
+            ofColor c = pixels.getColor(i,j);
+            //radius
+            //inverse relationship between brightness and size
+            //dependent on white background
+            int brightness = c.getBrightness();
+            int maxSize = 10;
+            float radius = ofMap(brightness,0,255,maxSize,0);
+
+            ofSetColor(c);
             ofPushMatrix();
             ofTranslate(i,j);
-            ofDrawCircle(0,0,3);
+            ofDrawCircle(0,0,radius);
             ofPopMatrix();
         }
     }
