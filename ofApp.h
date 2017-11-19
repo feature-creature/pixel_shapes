@@ -25,5 +25,6 @@ public:
     ofPixels pixels;
     int spacing;
     int startPos;
+    int mode;
 
 };

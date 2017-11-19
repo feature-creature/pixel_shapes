@@ -8,12 +8,12 @@ void ofApp::setup(){
     ofSetBackgroundColor(255);
     ofSetColor(0);
 
-    // initialize matrix
+    //initialize matrix
     spacing = 10;
     startPos = spacing/2;
 
     /*
-        camera initialization process
+        initialize camera
         list possible cameras (optional)
         select camera
         set camera framerate
@@ -23,6 +23,9 @@ void ofApp::setup(){
     vidGrabber.setDeviceID(0);
     vidGrabber.setDesiredFrameRate(30);
     vidGrabber.initGrabber(ofGetWidth(), ofGetHeight());
+
+    //initialize mode
+    mode = 1;
 
 }
 
@@ -53,12 +56,24 @@ void ofApp::draw(){
             //dependent on white background
             int brightness = c.getBrightness();
             int maxSize = spacing;
-            float radius = ofMap(brightness,0,255,maxSize,0);
 
             ofSetColor(c);
             ofPushMatrix();
             ofTranslate(i,j);
-            ofDrawCircle(0,0,radius);
+
+            if(mode == 1){
+                float radius = ofMap(brightness,0,255,maxSize,0);
+                ofDrawCircle(0,0,radius);
+            }
+
+            if(mode == 2){
+                maxSize = ofMap(mouseX,0,ofGetWidth(),0,spacing*4);
+                float length = ofMap(brightness,0,255,maxSize,3);
+                ofSetLineWidth(ofMap(brightness,0,255,3,1));
+                ofRotate(ofMap(brightness,0,255,0,180));
+                ofDrawLine(0,0,0,length);
+            }
+
             ofPopMatrix();
         }
     }
@@ -72,6 +87,12 @@ void ofApp::keyPressed(int key){
     // use date and framerate for unique naming
     if(key == 's'){
         ofSaveScreen(ofGetTimestampString() + "-" + ofToString(ofGetFrameNum()) + ".png");
+    }
+    if(key == '1'){
+        mode = 1;
+    }
+    if(key == '2'){
+        mode = 2;
     }
 }
 
