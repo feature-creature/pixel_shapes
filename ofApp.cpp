@@ -39,6 +39,7 @@ void ofApp::draw(){
     //move entire matrix away from the window edge
     ofTranslate(startPos,startPos);
     //iterate over matrix rows by columns
+    //64*48 circles (3074 total)
     for(int i = 0; i < ofGetWidth(); i += spacing){
         for(int j = 0; j < ofGetHeight(); j += spacing){
             //SHAPE
@@ -51,7 +52,7 @@ void ofApp::draw(){
             //inverse relationship between brightness and size
             //dependent on white background
             int brightness = c.getBrightness();
-            int maxSize = 10;
+            int maxSize = spacing;
             float radius = ofMap(brightness,0,255,maxSize,0);
 
             ofSetColor(c);
@@ -67,7 +68,11 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    // save a png screenshot for documentation in bin/data
+    // use date and framerate for unique naming
+    if(key == 's'){
+        ofSaveScreen(ofGetTimestampString() + "-" + ofToString(ofGetFrameNum()) + ".png");
+    }
 }
 
 //--------------------------------------------------------------
